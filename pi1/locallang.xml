@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for plugin tx_feuserprofile_pi1</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tt_content.list_type">FE User Profile</label>
+			
+			<!-- Flexforms -->
+			<label index="flexform.general.mode">Plugin Mode</label>
+			<label index="flexform.general.mode.0">View FE User Profile</label>
+			<label index="flexform.general.mode.1">Edit FE User Profile</label>
+			<label index="flexform.general.mode.2">List FE User Profiles</label>
+			<label index="flexform.general.mode.3">Search FE User Profiles</label>
+			<label index="flexform.general.mode.4">List Online FE User Profiles</label>
+			<label index="flexform.general.mode.5">List Disabled User Profiles</label>
+			<label index="flexform.general.mode.6">List Special User Profiles (where clause required!)</label>
+			<label index="flexform.general.startingpoint">FE User System Folder (id)</label>
+			<label index="flexform.general.showDisabledGroups">User Groups to display</label>
+			<label index="flexform.general.whereClause">WHERE clause (Special List only)</label>
+			<label index="flexform.general.orderBy">Default Sort Order (field)</label>
+			
+			<!-- Plugin Labels -->
+			<label index="view_l_username">Username</label>
+			<label index="view_l_name">Name</label>
+			<label index="view_l_email">eMail</label>
+			<label index="view_l_status">Online Status</label>
+			<label index="view_l_crdate">Member since</label>
+			<label index="view_l_address">Address</label>
+			<label index="view_l_telephone">Telephone</label>
+			<label index="view_l_fax">Fax</label>
+			<label index="edit_required">You must enter a value.</label>
+			<label index="edit_l_username">Username</label>
+			<label index="edit_l_name">Name</label>
+			<label index="edit_name_required">You must enter a name.</label>
+			<label index="edit_l_gender">Gender</label>
+			<label index="edit_l_gender_male">Male</label>
+			<label index="edit_l_gender_female">Female</label>
+			<label index="edit_l_email">eMail</label>
+			<label index="edit_email_invalid">This is not a valid eMail address.</label>
+			<label index="edit_email_required">You must enter an eMail address.</label>
+			<label index="edit_l_image">Image</label>
+			<label index="edit_image_internal_error">An internal error occurred. Please contact an administrator!</label>
+			<label index="edit_image_invalid_image_type">Only JPG, PNG and GIF images are permitted.</label>
+			<label index="edit_l_address">Address</label>
+			<label index="edit_l_telephone">Telephone</label>
+			<label index="edit_l_fax">Fax</label>
+			<label index="edit_l_password1">Enter new password</label>
+			<label index="edit_password1_missing">You forgot to enter the new password twice.</label>
+			<label index="edit_l_password2">Repeat new password</label>
+			<label index="edit_password2_missing">You forgot to enter the new password twice.</label>
+			<label index="edit_password_mismatch">The passwords are not equal. Please, try again!</label>
+			<label index="edit_saved">Your profile data was changed.</label>
+			<label index="l_username">Username</label>
+			<label index="l_name">Name</label>
+			<label index="l_email">eMail</label>
+			<label index="l_status">Online Status</label>
+			<label index="l_crdate">Member since</label>
+			<label index="l_address">Address</label>
+			<label index="l_telephone">Telephone</label>
+			<label index="l_fax">Fax</label>
+			<label index="l_lastlogin">Last Login</label>
+			<label index="l_is_online">Online</label>
+			<label index="l_pagenav">Page</label>
+			<label index="listnav_l_previous">Previous</label>
+			<label index="listnav_l_next">Next</label>
+			<label index="edit_err_date_format">Date must be of format dd/mm/yyyy.</label>
+			<label index="l_no_members">No members found.</label>
+			<label index="l_member_count">members found.</label>
+			<label index="l_member_filter">Filter:</label>
+			<label index="l_member_sort">Sort:</label>
+			<label index="l_both_genders">(Gender)</label>
+			<label index="l_male">Males</label>
+			<label index="l_female">Females</label>
+			<label index="l_sort_username">Login Name</label>
+			<label index="l_sort_name">Real Name</label>
+			<label index="l_sort_crdate">Membership</label>
+			<label index="l_sort_lastlogin">Last Login</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="tt_content.list_type">FE User Profil</label>
+			
+			<!-- Flexforms -->
+			<label index="flexform.general.mode">Plugin Mode</label>
+			<label index="flexform.general.mode.0">FE User Profil anzeigen</label>
+			<label index="flexform.general.mode.1">FE User Profil editieren</label>
+			<label index="flexform.general.mode.2">FE User Profile auflisten</label>
+			<label index="flexform.general.mode.3">FE User Profile suchen</label>
+			<label index="flexform.general.mode.4">FE User Online Profile auflisten</label>
+			<label index="flexform.general.mode.5">Deaktivierte FE User Profile auflisten</label>
+			<label index="flexform.general.mode.6">Spezielle FE User Profile (where clause erforderlich!)</label>
+			<label index="flexform.general.startingpoint">FE User System Folder (id)</label>
+			<label index="flexform.general.showDisabledGroups">Anzuzeigende Usergruppen</label>
+			<label index="flexform.general.whereClause">WHERE-Klausel (nur bei Spezial-Liste)</label>
+			<label index="flexform.general.orderBy">Normalsortierung (feldname)</label>
+			
+			<!-- Plugin labels -->
+			<label index="view_l_username">Benutzername</label>
+			<label index="view_l_name">Name</label>
+			<label index="view_l_email">eMail</label>
+			<label index="view_l_status">Online Status</label>
+			<label index="view_l_crdate">Mitglied seit</label>
+			<label index="view_l_address">Adresse</label>
+			<label index="view_l_telephone">Telefon</label>
+			<label index="view_l_fax">Fax</label>
+			<label index="edit_required">Dieses Feld darf nicht leer sein.</label>
+			<label index="edit_l_username">Benutzername</label>
+			<label index="edit_l_name">Name</label>
+			<label index="edit_name_required">Du musst einen Namen angeben.</label>
+			<label index="edit_l_gender">Geschlecht</label>
+			<label index="edit_l_gender_male">Männlich</label>
+			<label index="edit_l_gender_female">Weiblich</label>
+			<label index="edit_l_email">eMail</label>
+			<label index="edit_email_invalid">Dies ist keine gültige eMail-Adresse.</label>
+			<label index="edit_email_required">Du musst eine eMail-Adresse angeben.</label>
+			<label index="edit_l_image">Bild hochladen</label>
+			<label index="edit_image_internal_error">Ein interner Fehler ist aufgetreten. Bitte wende Dich an einen Administrator!</label>
+			<label index="edit_image_invalid_image_type">Nur Bilddateien vom Type JPG, PNG und GIF sind erlaubt.</label>
+			<label index="edit_l_address">Adresse</label>
+			<label index="edit_l_telephone">Telefon</label>
+			<label index="edit_l_fax">Fax</label>
+			<label index="edit_l_password1">Neues Passwort</label>
+			<label index="edit_password1_missing">Bitte gib das Passwort zweimal ein!</label>
+			<label index="edit_l_password2">Neues Passwort wiederholen</label>
+			<label index="edit_password2_missing">Bitte gib das Passwort zweimal ein!</label>
+			<label index="edit_password_mismatch">Die beiden Passwörter sind unterschiedlich!</label>
+			<label index="edit_saved">Die Profildaten wurden geändert.</label>
+			<label index="l_username">Benutzername</label>
+			<label index="l_name">Name</label>
+			<label index="l_email">eMail</label>
+			<label index="l_status">Online Status</label>
+			<label index="l_crdate">Mitglied seit</label>
+			<label index="l_address">Adresse</label>
+			<label index="l_telephone">Telefon</label>
+			<label index="l_fax">Fax</label>
+			<label index="l_lastlogin">Zuletzt online</label>
+			<label index="l_is_online">Online</label>
+			<label index="l_pagenav">Seite</label>
+			<label index="listnav_l_previous">Vorherige</label>
+			<label index="listnav_l_next">Nächste</label>
+			<label index="l_no_members">Keine Mitglieder gefunden.</label>
+			<label index="l_member_count">Mitglieder gefunden.</label>
+			<label index="edit_err_date_format">Datum nicht im Format dd/mm/yyyy.</label>
+			<label index="l_member_filter">Filtern:</label>
+			<label index="l_member_sort">Sortieren:</label>
+			<label index="l_both_genders">(Geschlecht)</label>
+			<label index="l_male">Maennlich</label>
+			<label index="l_female">Weiblich</label>
+			<label index="l_sort_username">Benutzername</label>
+			<label index="l_sort_name">Name</label>
+			<label index="l_sort_crdate">Mitgliedschaft</label>
+			<label index="l_sort_lastlogin">Letzter Login</label>
+		</languageKey>
+	</data>
+</T3locallang>

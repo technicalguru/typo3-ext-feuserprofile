@@ -1,0 +1,100 @@
+<T3DataStructure>
+	<meta>
+		<langDisable>1</langDisable>
+	</meta>
+	<sheets>
+		<sDEF>
+			<ROOT>
+				<TCEforms>
+				<sheetTitle>LLL:EXT:feuserprofile/locallang.xml:flexform.general.title</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+
+ 					<mode>
+						<TCEforms>
+							<label>LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.mode</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.mode.0</numIndex>
+										<numIndex index="1">VIEW</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.mode.1</numIndex>
+										<numIndex index="1">EDIT</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.mode.2</numIndex>
+										<numIndex index="1">LIST</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.mode.3</numIndex>
+										<numIndex index="1">SEARCH</numIndex>
+									</numIndex>
+									<numIndex index="4" type="array">
+										<numIndex index="0">LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.mode.4</numIndex>
+										<numIndex index="1">ONLINE</numIndex>
+									</numIndex>
+									<numIndex index="5" type="array">
+										<numIndex index="0">LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.mode.5</numIndex>
+										<numIndex index="1">DISABLED</numIndex>
+									</numIndex>
+									<numIndex index="6" type="array">
+										<numIndex index="0">LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.mode.6</numIndex>
+										<numIndex index="1">SPECIAL</numIndex>
+									</numIndex>
+                						</items>
+							</config>
+						</TCEforms>
+					</mode>
+				
+					<startingpoint>
+						<TCEforms>
+							<label>LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.startingpoint</label>
+							<config>
+								<type>input</type>
+								<size>25</size>
+								<eval>trim</eval>
+							</config>
+						</TCEforms>
+					</startingpoint>
+
+ 
+					<showDisabledGroups>
+						<TCEforms>
+							<label>LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.showDisabledGroups</label>
+							<config>
+								<type>input</type>
+								<size>25</size>
+								<eval>trim</eval>
+							</config>
+						</TCEforms>
+					</showDisabledGroups>
+
+					<specialWhereClause>
+						<TCEforms>
+							<label>LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.whereClause</label>
+							<config>
+								<type>input</type>
+								<size>55</size>
+								<eval>trim</eval>
+							</config>
+						</TCEforms>
+					</specialWhereClause>
+					<orderBy>
+						<TCEforms>
+							<label>LLL:EXT:feuserprofile/pi1/locallang.xml:flexform.general.orderBy</label>
+							<config>
+								<type>input</type>
+								<size>55</size>
+								<eval>trim</eval>
+							</config>
+						</TCEforms>
+					</orderBy>
+	    			</el>
+			</ROOT>
+		</sDEF>
+	</sheets>
+</T3DataStructure>
