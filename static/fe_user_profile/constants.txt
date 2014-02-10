@@ -1,12 +1,14 @@
 plugin.tx_feuserprofile {
-	listProfilesPID =
-	viewProfilePID =
-	editProfilePID =
-	userPicDir = uploads/userpics
-	pictureHeight = 160
-	pictureWidth = 160
-	previewPictureHeight = 64
-	previewPictureWidth = 64
-	# in KBytes
-	maxFileSize = 512
+  listProfilesPID =
+  viewProfilePID =
+  editProfilePID =
+  userProfileFolder =
+  dateFormat = %d.%m.%Y
+  userPicFolder = uploads/userpics
+  # in KBytes
+  maxFileSize = 500
+  pictureHeight = 160
+  pictureWidth = 160
+  previewPictureHeight = 64
+  previewPictureWidth = 64
 }

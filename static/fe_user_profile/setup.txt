@@ -1,41 +1,26 @@
-/*
-   Defines all basic templates for Oventa plugin
-*/
-plugin.tx_feuserprofile {
-	config < plugin.tx_rsextbase.config
-	
-	# Config values
-	config {
-		listProfilesPID = {$plugin.tx_feuserprofile.listProfilesPID}
-		viewProfilePID = {$plugin.tx_feuserprofile.viewProfilePID}
-		editProfilePID = {$plugin.tx_feuserprofile.editProfilePID}
-		userPicDir = {$plugin.tx_feuserprofile.userPicDir}
-		maxListItems = 30
-	}
-	
-	# HTML defaults
-	default < plugin.tx_rsextbase.default
-	default {
-	}
-}
-
 plugin.tx_feuserprofile_pi1 {
-	config < plugin.tx_feuserprofile.config
-	default < plugin.tx_feuserprofile.default
-
-	# image processing
-	maxFileSize = {$plugin.tx_rsextbase.maxFileSize}
-	maxW = 250
-	maxH = 250
-	
+	templateFile = EXT:feuserprofile/pi1/template.tmpl
+	listProfilesPID = {$plugin.tx_feuserprofile.listProfilesPID}
+	viewProfilePID = {$plugin.tx_feuserprofile.viewProfilePID}
+	editProfilePID = {$plugin.tx_feuserprofile.editProfilePID}
+	userProfileFolder = {$plugin.tx_feuserprofile.userProfileFolder}
+	userPicFolder = {$plugin.tx_feuserprofile.userPicFolder}
+	userAdminGroups = {$plugin.tx_feuserprofile.userAdminGroups}
+	maxListItems = 30;
 	search {
-		GPvar {
-			id = id
+		fieldnames = search,submit,list_page_uri
+		submit = TEXT
+		submit {
+			value = Search
+			lang.de = Suchen
+			wrap = <input type="submit" name="%%%GPVAR%%%" value="|"/>
+			htmlSpecialChars = 1
 		}
-		type {
-			search = form_input
-			id = form_hidden
-			submit = form_search
+		search = TEXT
+		search {
+			field = _value
+			wrap = <input type="text" name="%%%GPVAR%%%" value="|"/>
+			htmlSpecialChars = 1
 		}
 		list_page_uri = TEXT
 		list_page_uri.typolink {
@@ -45,15 +30,32 @@ plugin.tx_feuserprofile_pi1 {
 	}
 
 	view {
+		fieldnames = username,email,image,gender,name,crdate,address,telephone,fax,lastlogin
 		maxIdleTime = 60
-		type {
-			gender = gender_icon
-			online_status = online_status
-			lastlogin = lastlogin
-			crdate = date
-			email = email
+		default {
+			default = TEXT
+			default {
+				field = _value
+			}
 		}
-		
+		email = TEXT
+		email {
+			field = _value
+			required = 1
+			typolink.parameter.field = email
+		}
+		gender = CASE
+		gender {
+			key.field = _value
+			0 = IMAGE
+			0 {
+				file = EXT:feuserprofile/res/userlist_male.gif
+			}
+			1 = IMAGE
+			1 {
+				file = EXT:feuserprofile/res/userlist_female.gif
+			}
+		}
 		image = COA
 		image {
 			10 = CASE
@@ -66,13 +68,13 @@ plugin.tx_feuserprofile_pi1 {
 				}
 				0 = IMAGE
 				0 {
-					file = EXT:feuserprofile/res/icons/no_pic_male.png
+					file = EXT:feuserprofile/res/no_pic_male.png
 					file.maxW = 128
 					file.maxH = 128
 				}
 				1 = IMAGE
 				1 {
-					file = EXT:feuserprofile/res/icons/no_pic_female.png
+					file = EXT:feuserprofile/res/no_pic_female.png
 					file.maxW = 128
 					file.maxH = 128
 				}
@@ -84,38 +86,128 @@ plugin.tx_feuserprofile_pi1 {
 				file.maxH = {$plugin.tx_feuserprofile.pictureHeight}
 			}
 		}
+		status = CASE
+		status {
+			key.field = _is_online
+			0 = IMAGE
+			0 {
+				file = EXT:feuserprofile/res/userlist_status_offline.gif
+				altText = Offline
+			}
+			1 = IMAGE
+			1 {
+				file = EXT:feuserprofile/res/userlist_status_online.gif
+				altText = Online
+			}
+		}
+		lastlogin = COA
+		lastlogin {
+			10 < plugin.tx_feuserprofile_pi1.view.status
+			15 = TEXT
+			15.value = &nbsp;
+			20 = CASE
+			20 {
+				key.field = _is_online
+				default = TEXT
+				default {
+					field = _value
+					strftime = {$plugin.tx_feuserprofile.dateFormat}
+					required = 1
+				}
+				1 = TEXT
+				1 {
+					value = Online
+					wrap = <span class="useronline">|</span>
+				}
+			}
+		}
+		crdate = TEXT
+		crdate {
+			field = _value
+			strftime = {$plugin.tx_feuserprofile.dateFormat}
+			required = 1
+		}
 		GPvar {
 			uid = uid
 		}
 	}
 
 	edit {
-		fieldnames = username,email,password1,password2,image,gender,name,reset,submit,cancel
+		fieldnames = username,email,password1,password2,image,gender,name,address,telephone,fax,submit,reset
 		requiredFields = email,name
 		maxFileSize = {$plugin.tx_feuserprofile.maxFileSize}
 		useMD5 = 0
 		default {
+			default = TEXT
+			default {
+				field = _value
+				wrap = <input type="text" name="%%%GPVAR%%%" size="40" value="|"/>
+				htmlSpecialChars = 1
+			}
+			error = COA
+			error {
+				10 = TEXT
+				10.field = _value
+				20 = TEXT
+				20 {
+					field = _error
+					wrap = <div class="error">|</div>
+				}
+			}
+			view = TEXT
+			view {
+				field = _value
+			}
+			password = TEXT
+			password {
+				value = <input type="password" name="%%%GPVAR%%%" value=""/>
+			}
 			upload = TEXT
 			upload {
 				value = <input type="file" name="%%%GPVAR%%%" value="" maxlength="500000" accept="image/*"/>
 			}
+			check = CASE
+			check {
+				key.field = _value
+				default = TEXT
+				default {
+					value = <input type="checkbox" name="%%%GPVAR%%%" value="1" checked="checked"/>
+				}
+				0 = TEXT
+				0 {
+					value = <input type="checkbox" name="%%%GPVAR%%%" value="1"/>
+				}
+			}
+			text = TEXT
+			text {
+				field = _value
+				wrap = <textarea name="%%%GPVAR%%%" cols="30" rows="3">|</textarea>
+				stripHTML = true
+			}
+			date = COA
+			date {
+				10 = TEXT
+				10 {
+					value = <script type="text/javascript" src="%%%EXTPATH%%%res/date-picker-v4/js/datepicker.js"></script>
+				}
+				20 = TEXT
+				20 {
+					field = _value
+					wrap = <input type="text" size="8" id="%%%IDVAR%%%" name="%%%GPVAR%%%" class="dateformat-d-sl-m-sl-Y" value="|" />
+					# DO NOT CHANGE THIS
+					strftime = %d/%m/%Y
+				}
+			}
 		}
-		
 		type {
-			username = plain
+			username = view
 			# 'file' will ensure that processing method will be called on image
-			image = form_image
-			password1 = form_password
-			password2 = form_password
+			image = file
+			password1 = password
+			password2 = password
 			address = text
-			notice = plain
-			submit = form_submit
-			reset = form_reset
-			cancel = form_cancel
-			email = form_input
+			notice = view
 		}
-		
-		
 		gender = COA
 		gender {
 			10 = HTML
@@ -153,7 +245,56 @@ plugin.tx_feuserprofile_pi1 {
 				lang.de = Weiblich
 			}
 		}
-		
+		image = COA
+		image {
+			maxFileSize = {$plugin.tx_feuserprofile.maxFileSize}
+			maxW = 250
+			maxH = 250
+			10 = TEXT
+			10 {
+				value = <input type="file" name="%%%PREFIXID%%%[%%%FIELD%%%]" value="" maxlength="500000" accept="image/*"/>
+				stdWrap < plugin.tx_feuserprofile_pi1.edit.upload_stdWrap
+				wrap = <div class="userimage_upload">|</div>
+			}
+			20 = COA
+			20 {
+				10 = IMAGE
+				10 {
+					file.import.field = image
+					file.maxW = 64
+					file.maxH = 64
+				}
+				20 = TEXT
+				20 {
+					wrap = &nbsp;&nbsp;<input type="checkbox" name="tx_feuserprofile_pi1[removeImage]" value="1">&nbsp;|
+					if.isTrue.field = image
+					value = Remove image
+					lang.de = Bild entfernen
+				}
+				wrap = <div class="userimage_display">|</div>
+			}
+		}
+		submit = TEXT
+		submit {
+			value = Submit
+			lang.de = Speichern
+			wrap = <input type="submit" name="%%%GPVAR%%%" value="|"/>
+			htmlSpecialChars = 1
+		}
+		reset = TEXT
+		reset {
+			value = Reset
+			lang.de = Zurücksetzen
+			wrap = <input type="reset" name="%%%GPVAR%%%" value="|"/>
+			htmlSpecialChars = 1
+		}
+		cancel = TEXT
+		cancel {
+			value = Cancel
+			lang.de = Abbrechen
+			wrap = <input type="submit" name="%%%GPVAR%%%" value="|"/>
+			htmlSpecialChars = 1
+		}
 		GPvar {
 			uid = uid
 		}
@@ -161,12 +302,20 @@ plugin.tx_feuserprofile_pi1 {
 
 	list < plugin.tx_feuserprofile_pi1.view
 	list {
+		fieldnames = members,member_count,username,email,image,gender,status,name,crdate,address,telephone,fax,letters
 		_FILTERS = gender
 		_SORT = username,name,crdate,lastlogin
 		_SORT.lastlogin = DESC
-		
-		type {
-			username = userlink
+		username = TEXT
+		username {
+			field = _value
+			typolink {
+				parameter = {$plugin.tx_feuserprofile.viewProfilePID}
+				additionalParams {
+					field=uid
+					wrap = &action=profile&uid=|
+				}
+			}
 		}
 
 		GPvar {
@@ -174,25 +323,17 @@ plugin.tx_feuserprofile_pi1 {
 			sort_order = sort_order
 			sort_column = sort_column
 		}
+		lastlogin < plugin.tx_feuserprofile_pi1.view.lastlogin.20
 	}
-	
 	online < plugin.tx_feuserprofile_pi1.list
-	
+	online.fieldnames = members,member_count,username,email,image,gender,status,name,crdate,address,telephone,fax,lastlogin
 	disabled < plugin.tx_feuserprofile_pi1.online
-	
+	disabled.fieldnames = members,member_count,username,email,image,gender,name,address,telephone,fax
 	search {
 		actionParam = tx_feuserprofile[action]
 	}
-	
 	listnav {
-		type {
-			id = form_hidden
-			start = form_hidden
-		}
-		GPvar {
-			id = id
-		}
-		
+		fieldnames = pagenav,pageno,previous,next,member_count
 		pageno = TEXT
 		pageno {
 			field = pageno
@@ -217,13 +358,6 @@ plugin.tx_feuserprofile_pi1 {
 			 postCObject = TEXT
 			 postCObject.value = &nbsp;members.
 			 postCObject.lang.de = &nbsp;Mitglieder.
-		}
-		refresh = IMG_RESOURCE
-		refresh {
-			_isVisible = 1
-			file = EXT:feuserprofile/res/icons/refresh.png
-			file.maxH = 16
-			stdWrap.wrap = <input type="image" src="|" alt="Refresh"/>
 		}
 	}
 }

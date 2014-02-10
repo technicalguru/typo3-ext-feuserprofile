@@ -27,7 +27,7 @@
  * Hint: use extdeveval to insert/update function index above.
  */
 
-require_once(t3lib_extMgm::extPath('feuserprofile').'res/class.tx_feuserprofile_pibase.php');
+require_once(t3lib_extMgm::extPath('feuserprofile').'pi1/class.tx_feuserprofile_pibase.php');
 
 
 /**
@@ -38,26 +38,25 @@ require_once(t3lib_extMgm::extPath('feuserprofile').'res/class.tx_feuserprofile_
  * @subpackage	tx_feuserprofile
  */
 class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
-	
-	var $relPath       = 'pi1';
-	var $prefixId      = 'tx_feuserprofile_pi1';
-	var $scriptRelPath = 'pi1/class.tx_feuserprofile_pi1.php';
-	
-	// Files to be copied upon submit
-	var $submittedFiles = array();
-	// Files to be removed upon submit
-	var $submittedRemoveFiles = array();
-	// Fields to be restored upon failure
-	var $resetFields = array();
+	var $prefixId      = 'tx_feuserprofile_pi1';		// Same as class name
+	var $scriptRelPath = 'pi1/class.tx_feuserprofile_pi1.php';	// Path to this script relative to the extension dir.
+	var $extKey        = 'feuserprofile';	// The extension key.
+	var $submittedFiles = array(); // Files to be copied upon submit
+	var $submittedRemoveFiles = array(); // Files to be removed upon submit
+	var $resetFields = array(); // Fields to be restored upon failure
 
 	/**
-	 * The HTML content.
+	 * The main method of the PlugIn
+	 *
+	 * @param	string		$content: The PlugIn content
+	 * @param	array		$conf: The PlugIn configuration
+	 * @return	The content that is displayed on the website
 	 */
-	function getPluginContent() {
-		$this->setConfiguration('specialWhereClause');
-		$this->setConfiguration('orderBy');
-		$this->config['specialWhereClause'] = str_replace('###UID###', $GLOBALS["TSFE"]->fe_user->user['uid'], $this->config['specialWhereClause']);
-		
+	function main($content, $conf) {
+		$this->conf = $conf;
+		$this->pi_loadLL();
+		$this->init();
+
 		//print_r($this->config);		
 		$content='';
 		//$this->pi_linkToPage('get to this page again',$GLOBALS['TSFE']->id);
@@ -82,17 +81,17 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 	}
 
 	function getViewProfile() {
-		$template = $this->getSubTemplate('VIEW_PROFILE');
+		$template = $this->getSubpart($this->config['templateFile'], 'VIEW_PROFILE');
 		$uid = $this->getGPvar('view', 'uid');
 		if (!$uid && $GLOBALS['TSFE']->fe_user) {
 			$uid = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
 		if ($uid) {
-			$profile = $this->db->getUser($uid);
+			$profile = $this->getUserProfile($uid);
 		}
 
 		if ($profile) {
-			$profile['_is_online'] = $this->db->isUserOnline($uid);
+			$profile['_is_online'] = $this->isUserOnline($uid);
 			$rc = $this->fillTemplate($template, 'view', $profile);
 		} else {
 			$rc = 'no such user';
@@ -101,7 +100,7 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 	}
 
 	function getEditProfile() {
-		$template = $this->getSubTemplate('EDIT_PROFILE');
+		$template = $this->getSubpart($this->config['templateFile'], 'EDIT_PROFILE');
 		$profile = $this->retrieveProfile();
 		if (count($profile) > 0) {
 			$this->processGPvars('edit', $profile);
@@ -120,12 +119,11 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 	}
 
 	function getSearchProfiles() {
-		$template = $this->getSubTemplate('SEARCH_PROFILES');
+		$template = $this->getSubpart($this->config['templateFile'], 'SEARCH_PROFILES');
 		$keywords = $this->getGPvar('search', 'search');
 		$values = array (
 			'search' => $keywords,
 			'list_page_uri' => $this->config['listProfilesPID'],
-			'id' => $this->config['listProfilesPID'],
 		);
 		$rc = $this->fillTemplate($template, 'search', $values);
 		return $rc;
@@ -133,11 +131,11 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 
 	function retrieveProfile() {
 		$uid = $this->getGPvar('edit', 'uid');
-		if (!$this->db->isAdminUser() || (!$uid && $GLOBALS['TSFE']->fe_user)) {
+		if (!$this->isAdminUser() || (!$uid && $GLOBALS['TSFE']->fe_user)) {
 			$uid = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
 		if ($uid) {
-			$profile = $this->db->getUser($uid);
+			$profile = $this->getUserProfile($uid);
 		} else {
 			$profile = array();
 		}
@@ -148,10 +146,72 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 		// Attention: Do not process unless form was submittes
 		if (!$this->getGPvar($mode, 'submit')) return;
 
-		$rc = parent::processGPvars($mode, $valueArr);
-		
+		// Remember whether result can be saved
+		$result = TRUE;
+
+		$fields = explode(',', $this->config[$mode.'.']['fieldnames']);
+		foreach ($fields AS $field) {
+			// Ignore field if it is viewed only
+			$type = $this->config[$mode.'.']['type.'][$field];
+			if (($type == 'view') || ($type == 'ignore')) continue;
+
+			// Get the value submitted
+			$value = $this->getGPvar($mode, $field);
+
+			// if field was not delivered
+			if (!isset($value) && ($type != 'check') && ($type != 'file')) continue;
+
+			// Exception for file types
+			if ($type == 'file') {
+				$value = array(
+					'name' => $GLOBALS['_FILES'][$this->prefixId]['name'][$field],
+					'type' => $GLOBALS['_FILES'][$this->prefixId]['type'][$field],
+					'tmp_name' => $GLOBALS['_FILES'][$this->prefixId]['tmp_name'][$field],
+					'size' => $GLOBALS['_FILES'][$this->prefixId]['size'][$field],
+					'error' => $GLOBALS['_FILES'][$this->prefixId]['error'][$field],
+				);
+			} else if ($type == 'check') {
+				// Explicitely set value to null if not delivered (HTML specific)
+				if (!$value) $value = 0;
+			} else if ($type == 'date') {
+				// Parse dates
+				if ($value) {
+					$tArr = strptime($value, "%d/%m/%Y");
+					if ($tArr) {
+						$time = mktime($tArr['tm_hour'],$tArr['tm_min'],$tArr['tm_sec'],
+						        $tArr['tm_mon']+1,$tArr['tm_mday'],$tArr['tm_year']+1900);
+						$value = $time;
+					} else {
+						$this->fieldErrors[$field] = $this->pi_getLL($mode.'_err_date_format');
+						continue;
+					}
+				}
+			}
+
+			// Find the object for processing
+			$objName = $this->config[$mode.'.'][$field.'.']['processingClass'];
+			if ($objName) {
+				if (!$OBJECTS[$objName]) $OBJECTS[$objName] = t3lib_div::makeInstance($objName);
+				$obj = $OBJECTS[$objName];
+			} else {
+				$obj = $this;
+			}
+
+			// Call the method for processing
+			$funcName = 'process'.str_replace(' ','',ucwords(str_replace('_',' ',$field))).'GPvar';
+			if (method_exists($obj, $funcName)) {
+				// processThisAndThatGPvar()
+				$obj->$funcName($this, $mode, $value, $valueArr);
+			} else if (method_exists($obj, '_generalProcessGPvars')) {
+				$obj->_generalProcessGPvars($this, $mode, $field, $value, $valueArr);
+			} else {
+				// Set the value directly
+				$this->_generalProcessGPvars($this, $mode, $field, $value, $valueArr);
+			}
+		}
+
 		// Do save only if all processing was successful
-		if ($rc) {
+		if (!count($this->fieldErrors)) {
 			$this->submitRecord($valueArr);
 		} else {
 			$this->resetRecord($valueArr);
@@ -181,7 +241,6 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 		$updateRecord = $valueArr;
 		unset($updateRecord['uid']);
 		unset($updateRecord['pid']);
-		unset($updateRecord['_is_online']);
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users', "uid=$valueArr[uid] AND pid=$valueArr[pid]", $updateRecord);
 		$newProfile = $this->retrieveProfile();
 
@@ -268,9 +327,9 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 	}
 
 	function processImageGPvar($caller, $mode, $value, &$valueArr) {
-		$imgTypes = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
+		$imgTypes=array(1=>'gif',2=>'jpg',3=>'png');
 
-		$picFolder = $this->config['userPicDir'];
+		$picFolder = $this->config['userPicFolder'];
 		if (($value['name'] != '') && ($value['type'] != '') && ($value['tmp_name'] != '')) {
 			// upload
 			if ($value['error'] != 0) {
@@ -294,9 +353,9 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 			$finalName = $this->tempnam($picFolder, 'userpic_'.$valueArr['uid'].'_', $fileExt);
 
 			// Resize the image
-			$allowedSize = $this->config['maxFileSize'] * 1024;
-			$maxW = $this->config['maxW'];
-			$maxH = $this->config['maxH'];
+			$allowedSize = $this->config[$mode]['image.']['maxFileSize'] * 1024;
+			$maxW = $this->config[$mode]['image.']['maxW'];
+			$maxH = $this->config[$mode]['image.']['maxH'];
 			if (($value['size'] > $allowedSize) || ($dim[0] > $max) || ($dim[1] > $maxH)) {
 				if ((0 < $dim[2]) && ($dim[2] < 4)) {
 					// Only specific types can be resized
@@ -337,8 +396,26 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 		}
 	}
 
+	function resizeImage($imageInfo, $source, $maxW, $maxH) {
+		// We use Typo3 onboard tools
+		$ts = array (
+			'img' => 'IMG_RESOURCE',
+			'img.' => array(
+				'file' => $source,
+				'format' => $imgTypes[$imageInfo[2]],
+				'file.' => array(
+					'maxW' => $maxW,
+					'maxH' => $maxH,
+				),
+			),
+		);
+		$rc = $this->local_cObj->IMG_RESOURCE($ts['img.']);
+
+		return $rc;
+	}
+
 	function getListProfiles() {
-		$template = $this->getSubTemplate('LIST_PROFILES');
+		$template = $this->getSubpart($this->config['templateFile'], 'LIST_PROFILES');
 
 		$dataArr = array();
 
@@ -351,7 +428,7 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 	}
 
 	function getSpecialProfiles() {
-		$template = $this->getSubTemplate('LIST_PROFILES');
+		$template = $this->getSubpart($this->config['templateFile'], 'LIST_PROFILES');
 		$dataArr = array(
 			'type' => 'SPECIAL',
 		);
@@ -361,7 +438,7 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 	}
 
 	function getOnlineProfiles() {
-		$template = $this->getSubTemplate('LIST_PROFILES');
+		$template = $this->getSubpart($this->config['templateFile'], 'LIST_PROFILES');
 		$dataArr = array(
 			'type' => 'ONLINE',
 		);
@@ -370,7 +447,7 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 	}
 
 	function getDisabledProfiles() {
-		$template = $this->getSubTemplate('LIST_PROFILES');
+		$template = $this->getSubpart($this->config['templateFile'], 'LIST_PROFILES');
 		$dataArr = array(
 			'type' => 'DISABLED',
 		);
@@ -380,15 +457,15 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 
 	function getMembersMarkers($caller, $template, &$singleMarkers, &$subpartMarkers, &$wrapped, $mode, &$valueArr) {
 		if ($valueArr['type'] == 'ONLINE') {
-			$profiles = $this->db->getOnlineUsers();
+			$profiles = $this->getOnlineUserProfiles();
 		} else if ($valueArr['type'] == 'DISABLED') {
-			$profiles = $this->db->getDisabledUsers();
+			$profiles = $this->getDisabledUserProfiles();
 		} else if ($valueArr['type'] == 'SEARCH') {
-			$profiles = $this->db->getSearchUsers();
+			$profiles = $this->getSearchUserProfiles();
 		} else if ($valueArr['type'] == 'SPECIAL') {
-			$profiles = $this->db->getSpecialUsers();
+			$profiles = $this->getSpecialUsers();
 		} else {
-			$profiles = $this->db->getUsers();
+			$profiles = $this->getUsers();
 		}
 
 		// Filter and Sort
@@ -398,8 +475,8 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 		// Render the navigation first
 		$valueArr['member_count'] = count($profiles);
 		$startIndex = $this->getGPvar($mode, 'start');
-		$navtemplate = $this->getSubTemplate('LIST_NAVIGATION');
-		$navigation = $this->fillTemplate($navtemplate, 'listnav', array('start' => $startIndex, 'count' => count($profiles), 'id' => $this->id));
+		$navtemplate = $this->getSubpart($this->config['templateFile'], 'LIST_NAVIGATION');
+		$navigation = $this->fillTemplate($navtemplate, 'listnav', array('start' => $startIndex, 'count' => count($profiles)));
 		$content .= $navigation;
 
 		$rc = '';
@@ -414,7 +491,6 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 			// Render
 			$tdc = $odd ? 'class="odd"' : 'class="even"';
 			$localT = str_replace('###CLASS###', $tdc, $template);
-			$profile['_is_online'] = $this->db->isUserOnline($profile);
 			$content .= $this->fillTemplate($localT, $mode, $profile);
 			$odd = $odd ? 0 : 1;
 
@@ -444,7 +520,6 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 				'start' 	=> $i, 
 				'pageno' 	=> $pageNo, 
 				'_setLink' 	=> $i == $valueArr['start'] ? 0 : 1, 
-				'id' => $this->id,
 			);
 
 			$this->addFilterAndSortVars($tArr);
@@ -461,7 +536,6 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 				'start' => $valueArr['start'] + $this->config['maxListItems'],
 				'_setLink' => 1,
 				'pageno' => $this->getLabel('l_next', $mode, array()),
-				'id' => $this->id,
 			);
 			$this->addFilterAndSortVars($data);
 			$rc .= $this->fillTemplate($template, $mode, $data);
@@ -473,7 +547,6 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 				'start' => $valueArr['start'] - $this->config['maxListItems'],
 				'_setLink' => 1,
 				'pageno' => $this->getLabel('l_previous', $mode, array()),
-				'id' => $this->id,
 			);
 			$this->addFilterAndSortVars($data);
 			$rc = $this->fillTemplate($template, $mode, $data).$rc;

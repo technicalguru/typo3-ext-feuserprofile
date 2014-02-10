@@ -2,27 +2,10 @@
 <T3locallang>
 	<meta type="array">
 		<type>module</type>
-		<description>Language labels for plugin tx_feuserprofile_pi1</description>
+		<description>Language labels for plugin &quot;tx_feuserprofile_pi1&quot;</description>
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="tt_content.list_type">FE User Profile</label>
-			
-			<!-- Flexforms -->
-			<label index="flexform.general.mode">Plugin Mode</label>
-			<label index="flexform.general.mode.0">View FE User Profile</label>
-			<label index="flexform.general.mode.1">Edit FE User Profile</label>
-			<label index="flexform.general.mode.2">List FE User Profiles</label>
-			<label index="flexform.general.mode.3">Search FE User Profiles</label>
-			<label index="flexform.general.mode.4">List Online FE User Profiles</label>
-			<label index="flexform.general.mode.5">List Disabled User Profiles</label>
-			<label index="flexform.general.mode.6">List Special User Profiles (where clause required!)</label>
-			<label index="flexform.general.startingpoint">FE User System Folder (id)</label>
-			<label index="flexform.general.showDisabledGroups">User Groups to display</label>
-			<label index="flexform.general.whereClause">WHERE clause (Special List only)</label>
-			<label index="flexform.general.orderBy">Default Sort Order (field)</label>
-			
-			<!-- Plugin Labels -->
 			<label index="view_l_username">Username</label>
 			<label index="view_l_name">Name</label>
 			<label index="view_l_email">eMail</label>
@@ -80,23 +63,6 @@
 			<label index="l_sort_lastlogin">Last Login</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="tt_content.list_type">FE User Profil</label>
-			
-			<!-- Flexforms -->
-			<label index="flexform.general.mode">Plugin Mode</label>
-			<label index="flexform.general.mode.0">FE User Profil anzeigen</label>
-			<label index="flexform.general.mode.1">FE User Profil editieren</label>
-			<label index="flexform.general.mode.2">FE User Profile auflisten</label>
-			<label index="flexform.general.mode.3">FE User Profile suchen</label>
-			<label index="flexform.general.mode.4">FE User Online Profile auflisten</label>
-			<label index="flexform.general.mode.5">Deaktivierte FE User Profile auflisten</label>
-			<label index="flexform.general.mode.6">Spezielle FE User Profile (where clause erforderlich!)</label>
-			<label index="flexform.general.startingpoint">FE User System Folder (id)</label>
-			<label index="flexform.general.showDisabledGroups">Anzuzeigende Usergruppen</label>
-			<label index="flexform.general.whereClause">WHERE-Klausel (nur bei Spezial-Liste)</label>
-			<label index="flexform.general.orderBy">Normalsortierung (feldname)</label>
-			
-			<!-- Plugin labels -->
 			<label index="view_l_username">Benutzername</label>
 			<label index="view_l_name">Name</label>
 			<label index="view_l_email">eMail</label>

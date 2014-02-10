@@ -11,13 +11,13 @@
 ########################################################################
 
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 'RS Frontend User Profile',
+	'title' => 'FE User Profile',
 	'description' => 'Flexible Extension to view, list and edit Frontend user profiles',
 	'category' => 'plugin',
 	'author' => 'Ralph Schuster',
 	'author_email' => 'typo3@ralph-schuster.eu',
 	'shy' => '',
-	'dependencies' => 'rsextbase',
+	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
 	'module' => '',
@@ -29,10 +29,9 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
 	'author_company' => '',
-	'version' => '1.0.0',
+	'version' => '0.0.0',
 	'constraints' => array(
 		'depends' => array(
-			'rsextbase' => '',
 		),
 		'conflicts' => array(
 		),
