@@ -1,0 +1,363 @@
+plugin.tx_feuserprofile_pi1 {
+	templateFile = EXT:feuserprofile/pi1/template.tmpl
+	listProfilesPID = {$plugin.tx_feuserprofile.listProfilesPID}
+	viewProfilePID = {$plugin.tx_feuserprofile.viewProfilePID}
+	editProfilePID = {$plugin.tx_feuserprofile.editProfilePID}
+	userProfileFolder = {$plugin.tx_feuserprofile.userProfileFolder}
+	userPicFolder = {$plugin.tx_feuserprofile.userPicFolder}
+	userAdminGroups = {$plugin.tx_feuserprofile.userAdminGroups}
+	maxListItems = 30;
+	search {
+		fieldnames = search,submit,list_page_uri
+		submit = TEXT
+		submit {
+			value = Search
+			lang.de = Suchen
+			wrap = <input type="submit" name="%%%GPVAR%%%" value="|"/>
+			htmlSpecialChars = 1
+		}
+		search = TEXT
+		search {
+			field = _value
+			wrap = <input type="text" name="%%%GPVAR%%%" value="|"/>
+			htmlSpecialChars = 1
+		}
+		list_page_uri = TEXT
+		list_page_uri.typolink {
+			parameter.field = _value
+			returnLast	= url
+		}
+	}
+
+	view {
+		fieldnames = username,email,image,gender,name,crdate,address,telephone,fax,lastlogin
+		maxIdleTime = 60
+		default {
+			default = TEXT
+			default {
+				field = _value
+			}
+		}
+		email = TEXT
+		email {
+			field = _value
+			required = 1
+			typolink.parameter.field = email
+		}
+		gender = CASE
+		gender {
+			key.field = _value
+			0 = IMAGE
+			0 {
+				file = EXT:feuserprofile/res/userlist_male.gif
+			}
+			1 = IMAGE
+			1 {
+				file = EXT:feuserprofile/res/userlist_female.gif
+			}
+		}
+		image = COA
+		image {
+			10 = CASE
+			10 {
+				key.field = gender
+				if.isFalse.field = _value
+				default = TEXT
+				default {
+					value = 
+				}
+				0 = IMAGE
+				0 {
+					file = EXT:feuserprofile/res/no_pic_male.png
+					file.maxW = 128
+					file.maxH = 128
+				}
+				1 = IMAGE
+				1 {
+					file = EXT:feuserprofile/res/no_pic_female.png
+					file.maxW = 128
+					file.maxH = 128
+				}
+			}
+			20 = IMAGE
+			20 {
+				file.import.field = _value
+				file.maxW = {$plugin.tx_feuserprofile.pictureWidth}
+				file.maxH = {$plugin.tx_feuserprofile.pictureHeight}
+			}
+		}
+		status = CASE
+		status {
+			key.field = _is_online
+			0 = IMAGE
+			0 {
+				file = EXT:feuserprofile/res/userlist_status_offline.gif
+				altText = Offline
+			}
+			1 = IMAGE
+			1 {
+				file = EXT:feuserprofile/res/userlist_status_online.gif
+				altText = Online
+			}
+		}
+		lastlogin = COA
+		lastlogin {
+			10 < plugin.tx_feuserprofile_pi1.view.status
+			15 = TEXT
+			15.value = &nbsp;
+			20 = CASE
+			20 {
+				key.field = _is_online
+				default = TEXT
+				default {
+					field = _value
+					strftime = {$plugin.tx_feuserprofile.dateFormat}
+					required = 1
+				}
+				1 = TEXT
+				1 {
+					value = Online
+					wrap = <span class="useronline">|</span>
+				}
+			}
+		}
+		crdate = TEXT
+		crdate {
+			field = _value
+			strftime = {$plugin.tx_feuserprofile.dateFormat}
+			required = 1
+		}
+		GPvar {
+			uid = uid
+		}
+	}
+
+	edit {
+		fieldnames = username,email,password1,password2,image,gender,name,address,telephone,fax,submit,reset
+		requiredFields = email,name
+		maxFileSize = {$plugin.tx_feuserprofile.maxFileSize}
+		useMD5 = 0
+		default {
+			default = TEXT
+			default {
+				field = _value
+				wrap = <input type="text" name="%%%GPVAR%%%" size="40" value="|"/>
+				htmlSpecialChars = 1
+			}
+			error = COA
+			error {
+				10 = TEXT
+				10.field = _value
+				20 = TEXT
+				20 {
+					field = _error
+					wrap = <div class="error">|</div>
+				}
+			}
+			view = TEXT
+			view {
+				field = _value
+			}
+			password = TEXT
+			password {
+				value = <input type="password" name="%%%GPVAR%%%" value=""/>
+			}
+			upload = TEXT
+			upload {
+				value = <input type="file" name="%%%GPVAR%%%" value="" maxlength="500000" accept="image/*"/>
+			}
+			check = CASE
+			check {
+				key.field = _value
+				default = TEXT
+				default {
+					value = <input type="checkbox" name="%%%GPVAR%%%" value="1" checked="checked"/>
+				}
+				0 = TEXT
+				0 {
+					value = <input type="checkbox" name="%%%GPVAR%%%" value="1"/>
+				}
+			}
+			text = TEXT
+			text {
+				field = _value
+				wrap = <textarea name="%%%GPVAR%%%" cols="30" rows="3">|</textarea>
+				stripHTML = true
+			}
+			date = COA
+			date {
+				10 = TEXT
+				10 {
+					value = <script type="text/javascript" src="%%%EXTPATH%%%res/date-picker-v4/js/datepicker.js"></script>
+				}
+				20 = TEXT
+				20 {
+					field = _value
+					wrap = <input type="text" size="8" id="%%%IDVAR%%%" name="%%%GPVAR%%%" class="dateformat-d-sl-m-sl-Y" value="|" />
+					# DO NOT CHANGE THIS
+					strftime = %d/%m/%Y
+				}
+			}
+		}
+		type {
+			username = view
+			# 'file' will ensure that processing method will be called on image
+			image = file
+			password1 = password
+			password2 = password
+			address = text
+			notice = view
+		}
+		gender = COA
+		gender {
+			10 = HTML
+			10 {
+				value = <input type="radio" name="%%%GPVAR%%%" value="0"/>&nbsp;
+				value.addParams {
+					checked = checked
+					checked {
+						if.isFalse.field = gender
+						override = checked
+					}
+					_offset = -1
+				}
+			}
+			20 = TEXT
+			20 {
+				value = Male
+				lang.de = Männlich
+			}
+			30 = HTML
+			30 {
+				value = &nbsp;&nbsp;<input type="radio" name="%%%GPVAR%%%" value="1">&nbsp;
+				value.addParams {
+					checked = checked
+					checked {
+						if.isTrue.field = gender
+						override = checked
+					}
+					_offset = -1
+				}
+			}
+			40 = TEXT
+			40 {
+				value = Female
+				lang.de = Weiblich
+			}
+		}
+		image = COA
+		image {
+			maxFileSize = {$plugin.tx_feuserprofile.maxFileSize}
+			maxW = 250
+			maxH = 250
+			10 = TEXT
+			10 {
+				value = <input type="file" name="%%%PREFIXID%%%[%%%FIELD%%%]" value="" maxlength="500000" accept="image/*"/>
+				stdWrap < plugin.tx_feuserprofile_pi1.edit.upload_stdWrap
+				wrap = <div class="userimage_upload">|</div>
+			}
+			20 = COA
+			20 {
+				10 = IMAGE
+				10 {
+					file.import.field = image
+					file.maxW = 64
+					file.maxH = 64
+				}
+				20 = TEXT
+				20 {
+					wrap = &nbsp;&nbsp;<input type="checkbox" name="tx_feuserprofile_pi1[removeImage]" value="1">&nbsp;|
+					if.isTrue.field = image
+					value = Remove image
+					lang.de = Bild entfernen
+				}
+				wrap = <div class="userimage_display">|</div>
+			}
+		}
+		submit = TEXT
+		submit {
+			value = Submit
+			lang.de = Speichern
+			wrap = <input type="submit" name="%%%GPVAR%%%" value="|"/>
+			htmlSpecialChars = 1
+		}
+		reset = TEXT
+		reset {
+			value = Reset
+			lang.de = Zurücksetzen
+			wrap = <input type="reset" name="%%%GPVAR%%%" value="|"/>
+			htmlSpecialChars = 1
+		}
+		cancel = TEXT
+		cancel {
+			value = Cancel
+			lang.de = Abbrechen
+			wrap = <input type="submit" name="%%%GPVAR%%%" value="|"/>
+			htmlSpecialChars = 1
+		}
+		GPvar {
+			uid = uid
+		}
+	}
+
+	list < plugin.tx_feuserprofile_pi1.view
+	list {
+		fieldnames = members,member_count,username,email,image,gender,status,name,crdate,address,telephone,fax,letters
+		_FILTERS = gender
+		_SORT = username,name,crdate,lastlogin
+		_SORT.lastlogin = DESC
+		username = TEXT
+		username {
+			field = _value
+			typolink {
+				parameter = {$plugin.tx_feuserprofile.viewProfilePID}
+				additionalParams {
+					field=uid
+					wrap = &action=profile&uid=|
+				}
+			}
+		}
+
+		GPvar {
+			letter = letter
+			sort_order = sort_order
+			sort_column = sort_column
+		}
+		lastlogin < plugin.tx_feuserprofile_pi1.view.lastlogin.20
+	}
+	online < plugin.tx_feuserprofile_pi1.list
+	online.fieldnames = members,member_count,username,email,image,gender,status,name,crdate,address,telephone,fax,lastlogin
+	disabled < plugin.tx_feuserprofile_pi1.online
+	disabled.fieldnames = members,member_count,username,email,image,gender,name,address,telephone,fax
+	search {
+		actionParam = tx_feuserprofile[action]
+	}
+	listnav {
+		fieldnames = pagenav,pageno,previous,next,member_count
+		pageno = TEXT
+		pageno {
+			field = pageno
+			typolink {
+				 parameter.data = TSFE:id
+				 parameter.if.isTrue.field = _setLink
+				 additionalParams {
+					 field = start
+					 preCObject = TEXT
+					 preCObject.value = &tx_feuserprofile_pi1[start]=
+				 }
+				 addQueryString = 1
+				 addQueryString.exclude = x,y
+			}
+			wrap = <span class="listnav">|</span>
+			outerWrap = <b>|</b>
+			outerWrap.if.isFalse.field = _setLink
+		}
+		member_count = TEXT
+		member_count {
+			 field = count
+			 postCObject = TEXT
+			 postCObject.value = &nbsp;members.
+			 postCObject.lang.de = &nbsp;Mitglieder.
+		}
+	}
+}

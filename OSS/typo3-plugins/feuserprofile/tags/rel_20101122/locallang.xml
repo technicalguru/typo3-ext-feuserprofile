@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for extension 'feuserprofile'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="pi1_title">FE User Profile</label>
+			<label index="flexform.sheets.general.title">General Settings</label>
+			<label index="flexform.sheets.general.mode">Plugin Mode</label>
+			<label index="flexform.sheets.general.mode.0">View FE User Profile</label>
+			<label index="flexform.sheets.general.mode.1">Edit FE User Profile</label>
+			<label index="flexform.sheets.general.mode.2">List FE User Profiles</label>
+			<label index="flexform.sheets.general.mode.3">Search FE User Profiles</label>
+			<label index="flexform.sheets.general.mode.4">List Online FE User Profiles</label>
+			<label index="flexform.sheets.general.mode.5">List Disabled User Profiles</label>
+			<label index="flexform.sheets.general.mode.6">List Special User Profiles (where clause required!)</label>
+			<label index="flexform.sheets.general.startingpoint">FE User System Folder (id)</label>
+			<label index="flexform.sheets.general.showDisabledGroups">User Groups to display (Disabled List only)</label>
+			<label index="flexform.sheets.general.whereClause">WHERE clause (Special List only)</label>
+			<label index="flexform.sheets.general.orderBy">Default Sort Order (field)</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="pi1_title">FE User Profil</label>
+			<label index="flexform.sheets.general.title">Allgemeine Einstellungen</label>
+			<label index="flexform.sheets.general.mode">Plugin Mode</label>
+			<label index="flexform.sheets.general.mode.0">FE User Profil anzeigen</label>
+			<label index="flexform.sheets.general.mode.1">FE User Profil editieren</label>
+			<label index="flexform.sheets.general.mode.2">FE User Profile auflisten</label>
+			<label index="flexform.sheets.general.mode.3">FE User Profile suchen</label>
+			<label index="flexform.sheets.general.mode.4">FE User Online Profile auflisten</label>
+			<label index="flexform.sheets.general.mode.5">Deaktivierte FE User Profile auflisten</label>
+			<label index="flexform.sheets.general.mode.6">Spezielle FE User Profile (where clause erforderlich!)</label>
+			<label index="flexform.sheets.general.startingpoint">FE User System Folder (id)</label>
+			<label index="flexform.sheets.general.showDisabledGroups">Anzuzeigende Usergruppen (nur bei Deaktivierte Liste)</label>
+			<label index="flexform.sheets.general.whereClause">WHERE-Klausel (nur bei Spezial-Liste)</label>
+			<label index="flexform.sheets.general.orderBy">Normalsortierung (feldname)</label>
+		</languageKey>
+	</data>
+</T3locallang>
