@@ -1,0 +1,177 @@
+<!-- ###VIEW_PROFILE### begin -->
+<h1>###USERNAME###</h1>
+<table>
+<!-- ###USERNAME### begin -->
+	<tr>
+		<th align="left">###L_USERNAME###:</th><td>###USERNAME###&nbsp;###GENDER###</td><td rowspan="###SUB_MARKER_COUNT###" valign="top">###IMAGE###</td>
+	</tr>
+<!-- ###USERNAME### end -->
+<!-- ###LASTLOGIN### begin -->
+	<tr>
+		<th align="left">###L_LASTLOGIN###:</th><td>###LASTLOGIN###</td>
+	</tr>
+<!-- ###LASTLOGIN### end -->
+<!-- ###CRDATE### begin -->
+	<tr>
+		<th align="left">###L_CRDATE###:</th><td>###CRDATE###</td>
+	</tr>
+<!-- ###CRDATE### end -->
+<!-- ###NAME### begin -->
+	<tr>
+		<th align="left" >###L_NAME###:</th><td>###NAME###</td>
+	</tr>
+<!-- ###NAME### end -->
+<!-- ###ADDRESS### begin -->
+	<tr>
+		<th align="left" valign="top">###L_ADDRESS###:</th><td>###ADDRESS###<br>###ZIP###&nbsp;###CITY###<br>###COUNTRY###</td>
+	</tr>
+<!-- ###ADDRESS### end -->
+<!-- ###TELEPHONE### begin -->
+	<tr>
+		<th align="left">###L_TELEPHONE###:</th><td>###TELEPHONE###</td>
+	</tr>
+<!-- ###TELEPHONE### end -->
+<!-- ###FAX### begin -->
+	<tr>
+		<th align="left">###L_FAX###:</th><td>###FAX###</td>
+	</tr>
+<!-- ###FAX### end -->
+<!-- ###EMAIL### begin -->
+	<tr>
+		<th align="left">###L_EMAIL###:</th><td>###EMAIL###</td>
+	</tr>
+<!-- ###EMAIL### end -->
+</table>
+<!-- ###VIEW_PROFILE### end -->
+
+<!-- ###USER_ONLINE### begin -->
+<span class="useronline">###L_ONLINE###</span>
+<!-- ###USER_ONLINE### end -->
+
+############################################################################################
+############################################################################################
+############################################################################################
+
+<!-- ###EDIT_PROFILE### begin -->
+<!-- ###MD5### begin -->
+<script language="JavaScript" type="text/javascript" src="typo3/md5.js">
+</script>
+<script language="JavaScript" type="text/javascript">
+<!--
+
+function enc_form(form) {
+        var pass1 = form['###GPVAR_PASSWORD1###'].value;
+        var pass2 = form['###GPVAR_PASSWORD2###'].value;
+        if (pass1 != '') {
+        	var enc_pass = MD5(pass1);
+        	form['###GPVAR_PASSWORD1###'].value = enc_pass;
+        }
+        if (pass2 != '') {
+        	var enc_pass = MD5(pass2);
+        	form['###GPVAR_PASSWORD2###'].value = enc_pass;
+        }
+        return true;
+}
+
+// -->
+</script>
+<!-- ###MD5### end -->
+
+<!-- ###NOTICE### begin --><div class="note">###NOTICE###</div><!-- ###NOTICE### end -->
+<form action="###PAGE_URI###" method="POST" enctype="multipart/form-data" name="feuserprofile_edit" ###MD5_SUBMIT###>
+<table>
+<!-- ###USERNAME### begin -->
+	<tr>
+		<th align="left">###L_USERNAME###:</th><td>###USERNAME###</td>
+	</tr>
+<!-- ###USERNAME### end -->
+<!-- ###NAME### begin -->
+	<tr>
+		<th align="left" >###L_NAME###:</th><td>###NAME###</td>
+	</tr>
+<!-- ###NAME### end -->
+<!-- ###GENDER### begin -->
+	<tr>
+		<th align="left" >###L_GENDER###:</th><td>###GENDER###</td>
+	</tr>
+<!-- ###GENDER### end -->
+<!-- ###IMAGE### begin -->
+	<tr>
+		<th align="left" >###L_IMAGE###:</th><td>###IMAGE###</td>
+	</tr>
+<!-- ###IMAGE### end -->
+<!-- ###ADDRESS### begin -->
+	<tr>
+		<th align="left" valign="top">###L_ADDRESS###:</th><td>###ADDRESS###<br>###ZIP###&nbsp;###CITY###<br>###COUNTRY###</td>
+	</tr>
+<!-- ###ADDRESS### end -->
+<!-- ###TELEPHONE### begin -->
+	<tr>
+		<th align="left">###L_TELEPHONE###:</th><td>###TELEPHONE###</td>
+	</tr>
+<!-- ###TELEPHONE### end -->
+<!-- ###FAX### begin -->
+	<tr>
+		<th align="left">###L_FAX###:</th><td>###FAX###</td>
+	</tr>
+<!-- ###FAX### end -->
+<!-- ###EMAIL### begin -->
+	<tr>
+		<th align="left">###L_EMAIL###:</th><td>###EMAIL###</td>
+	</tr>
+<!-- ###EMAIL### end -->
+<!-- ###PASSWORD1### begin -->
+	<tr>
+		<th align="left" >###L_PASSWORD1###:</th><td>###PASSWORD1###</td>
+	</tr>
+<!-- ###PASSWORD1### end -->
+<!-- ###PASSWORD2### begin -->
+	<tr>
+		<th align="left" >###L_PASSWORD2###:</th><td>###PASSWORD2###</td>
+	</tr>
+<!-- ###PASSWORD2### end -->
+</table>
+###RESET### ###SUBMIT###
+</form>
+<!-- ###EDIT_PROFILE### end -->
+
+############################################################################################
+############################################################################################
+############################################################################################
+
+<!-- ###LIST_PROFILES### begin -->
+<div class="membercount">
+###MEMBER_COUNT### ###L_MEMBER_COUNT###
+</div>
+<div class="memberfilter">
+###L_MEMBER_FILTER###
+###MEMBER_FILTER###
+###L_MEMBER_SORT### ###MEMBER_SORT###
+</div>
+<table>
+	<tr>
+		<th>&nbsp;</th>
+		<th>###L_USERNAME###</th>
+		<th>###L_NAME###</th>
+	</tr>
+	<!-- ###MEMBERS### begin -->
+	<tr>
+		<td ###CLASS###>###STATUS###</td>
+		<td ###CLASS###>###USERNAME### ###GENDER###</td>
+		<td ###CLASS###>###NAME###</td>
+	</tr>
+	<!-- ###MEMBERS### end -->
+</table>
+<!-- ###LIST_PROFILES### end -->
+
+############################################################################################
+############################################################################################
+############################################################################################
+
+<!-- ###SEARCH_PROFILES### begin -->
+<form action="###LIST_PAGE_URI###" method="GET">
+###ID###
+###SEARCH###
+###SUBMIT###
+</form>
+<!-- ###SEARCH_PROFILES### end -->

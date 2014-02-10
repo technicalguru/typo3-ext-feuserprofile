@@ -1,0 +1,229 @@
+/*
+   Defines all basic templates for Oventa plugin
+*/
+plugin.tx_feuserprofile {
+	config < plugin.tx_rsextbase.config
+	
+	# Config values
+	config {
+		listProfilesPID = {$plugin.tx_feuserprofile.listProfilesPID}
+		viewProfilePID = {$plugin.tx_feuserprofile.viewProfilePID}
+		editProfilePID = {$plugin.tx_feuserprofile.editProfilePID}
+		userPicDir = {$plugin.tx_feuserprofile.userPicDir}
+		maxListItems = 30
+	}
+	
+	# HTML defaults
+	default < plugin.tx_rsextbase.default
+	default {
+	}
+}
+
+plugin.tx_feuserprofile_pi1 {
+	config < plugin.tx_feuserprofile.config
+	default < plugin.tx_feuserprofile.default
+
+	# image processing
+	maxFileSize = {$plugin.tx_rsextbase.maxFileSize}
+	maxW = 250
+	maxH = 250
+	
+	search {
+		GPvar {
+			id = id
+		}
+		type {
+			search = form_input
+			id = form_hidden
+			submit = form_search
+		}
+		list_page_uri = TEXT
+		list_page_uri.typolink {
+			parameter.field = _value
+			returnLast	= url
+		}
+	}
+
+	view {
+		maxIdleTime = 60
+		type {
+			gender = gender_icon
+			online_status = online_status
+			lastlogin = lastlogin
+			crdate = date
+			email = email
+		}
+		
+		image = COA
+		image {
+			10 = CASE
+			10 {
+				key.field = gender
+				if.isFalse.field = _value
+				default = TEXT
+				default {
+					value = 
+				}
+				0 = IMAGE
+				0 {
+					file = EXT:feuserprofile/res/icons/no_pic_male.png
+					file.maxW = 128
+					file.maxH = 128
+				}
+				1 = IMAGE
+				1 {
+					file = EXT:feuserprofile/res/icons/no_pic_female.png
+					file.maxW = 128
+					file.maxH = 128
+				}
+			}
+			20 = IMAGE
+			20 {
+				file.import.field = _value
+				file.maxW = {$plugin.tx_feuserprofile.pictureWidth}
+				file.maxH = {$plugin.tx_feuserprofile.pictureHeight}
+			}
+		}
+		GPvar {
+			uid = uid
+		}
+	}
+
+	edit {
+		fieldnames = username,email,password1,password2,image,gender,name,reset,submit,cancel
+		requiredFields = email,name
+		maxFileSize = {$plugin.tx_feuserprofile.maxFileSize}
+		useMD5 = 0
+		default {
+			upload = TEXT
+			upload {
+				value = <input type="file" name="%%%GPVAR%%%" value="" maxlength="500000" accept="image/*"/>
+			}
+		}
+		
+		type {
+			username = plain
+			# 'file' will ensure that processing method will be called on image
+			image = form_image
+			password1 = form_password
+			password2 = form_password
+			address = text
+			notice = plain
+			submit = form_submit
+			reset = form_reset
+			cancel = form_cancel
+			email = form_input
+		}
+		
+		
+		gender = COA
+		gender {
+			10 = HTML
+			10 {
+				value = <input type="radio" name="%%%GPVAR%%%" value="0"/>&nbsp;
+				value.addParams {
+					checked = checked
+					checked {
+						if.isFalse.field = gender
+						override = checked
+					}
+					_offset = -1
+				}
+			}
+			20 = TEXT
+			20 {
+				value = Male
+				lang.de = Männlich
+			}
+			30 = HTML
+			30 {
+				value = &nbsp;&nbsp;<input type="radio" name="%%%GPVAR%%%" value="1">&nbsp;
+				value.addParams {
+					checked = checked
+					checked {
+						if.isTrue.field = gender
+						override = checked
+					}
+					_offset = -1
+				}
+			}
+			40 = TEXT
+			40 {
+				value = Female
+				lang.de = Weiblich
+			}
+		}
+		
+		GPvar {
+			uid = uid
+		}
+	}
+
+	list < plugin.tx_feuserprofile_pi1.view
+	list {
+		_FILTERS = gender
+		_SORT = username,name,crdate,lastlogin
+		_SORT.lastlogin = DESC
+		
+		type {
+			username = userlink
+		}
+
+		GPvar {
+			letter = letter
+			sort_order = sort_order
+			sort_column = sort_column
+		}
+	}
+	
+	online < plugin.tx_feuserprofile_pi1.list
+	
+	disabled < plugin.tx_feuserprofile_pi1.online
+	
+	search {
+		actionParam = tx_feuserprofile[action]
+	}
+	
+	listnav {
+		type {
+			id = form_hidden
+			start = form_hidden
+		}
+		GPvar {
+			id = id
+		}
+		
+		pageno = TEXT
+		pageno {
+			field = pageno
+			typolink {
+				 parameter.data = TSFE:id
+				 parameter.if.isTrue.field = _setLink
+				 additionalParams {
+					 field = start
+					 preCObject = TEXT
+					 preCObject.value = &tx_feuserprofile_pi1[start]=
+				 }
+				 addQueryString = 1
+				 addQueryString.exclude = x,y
+			}
+			wrap = <span class="listnav">|</span>
+			outerWrap = <b>|</b>
+			outerWrap.if.isFalse.field = _setLink
+		}
+		member_count = TEXT
+		member_count {
+			 field = count
+			 postCObject = TEXT
+			 postCObject.value = &nbsp;members.
+			 postCObject.lang.de = &nbsp;Mitglieder.
+		}
+		refresh = IMG_RESOURCE
+		refresh {
+			_isVisible = 1
+			file = EXT:feuserprofile/res/icons/refresh.png
+			file.maxH = 16
+			stdWrap.wrap = <input type="image" src="|" alt="Refresh"/>
+		}
+	}
+}
