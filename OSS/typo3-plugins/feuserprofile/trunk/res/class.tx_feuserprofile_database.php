@@ -28,21 +28,21 @@ require_once(t3lib_extMgm::extPath('rsextbase').'res/class.tx_rsextbase_database
 
 class tx_feuserprofile_database extends tx_rsextbase_database {
 
-	function getSpecialUsers() {
-		$pid = $this->pi->config['userFolder'];
+	function getSpecialUsers($disabledGroups = array()) {
+		$pid = $this->config['userFolder'];
 
 		// Order and Filter
-		$where = $this->pi->config['specialWhereClause'];
+		$where = $this->config['specialWhereClause'];
 
-		return $this->filterGroups($this->getUsersWhere($where), $this->pi->disabledGroups);
+		return $this->filterGroups($this->getUsersWhere($where), $disabledGroups);
 	}
 
-	function getSearchUsers() {
-		$pid = $this->pi->config['userFolder'];
+	function getSearchUsers($keywords) {
+		$pid = $this->config['userFolder'];
 
 		// Order and Filter
 		$search = "";
-		$keywords = strtoupper($this->pi->getGPvar('list', 'search'));
+		$keywords = strtoupper($keywords);
 		$search = "(UPPER(name) like '%$keywords%') OR (UPPER(username) like '%$keywords%')";
 
 		// Return non-deleted, enabled records
@@ -54,15 +54,15 @@ class tx_feuserprofile_database extends tx_rsextbase_database {
 		return $this->getUsersWhere($where);
 	}
 
-	function getDisabledUsers() {
-		$pid = $this->pi->config['userFolder'];
+	function getDisabledUsers($disabledGroups = array()) {
+		$pid = $this->config['userFolder'];
 
 		// Order and Filter params
 
 		// Return non-deleted records
 		$rc = array();
 		$where =  "deleted=0 AND pid=$pid AND disable > 0";
-		return $this->filterGroups($this->getUsersWhere($where), $this->pi->disabledGroups);
+		return $this->filterGroups($this->getUsersWhere($where), $disabledGroups);
 	}
 	
 	function filterGroups($users, $filteredGroups) {

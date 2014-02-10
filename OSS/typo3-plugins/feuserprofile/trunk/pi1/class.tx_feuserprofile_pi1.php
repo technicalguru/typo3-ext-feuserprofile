@@ -45,8 +45,10 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 	
 	// Files to be copied upon submit
 	var $submittedFiles = array();
+	
 	// Files to be removed upon submit
 	var $submittedRemoveFiles = array();
+	
 	// Fields to be restored upon failure
 	var $resetFields = array();
 
@@ -382,11 +384,11 @@ class tx_feuserprofile_pi1 extends tx_feuserprofile_pibase {
 		if ($valueArr['type'] == 'ONLINE') {
 			$profiles = $this->db->getOnlineUsers();
 		} else if ($valueArr['type'] == 'DISABLED') {
-			$profiles = $this->db->getDisabledUsers();
+			$profiles = $this->db->getDisabledUsers($this->disabledGroups);
 		} else if ($valueArr['type'] == 'SEARCH') {
-			$profiles = $this->db->getSearchUsers();
+			$profiles = $this->db->getSearchUsers($this->getGPvar('list', 'search'));
 		} else if ($valueArr['type'] == 'SPECIAL') {
-			$profiles = $this->db->getSpecialUsers();
+			$profiles = $this->db->getSpecialUsers($this->disabledGroups);
 		} else {
 			$profiles = $this->db->getUsers();
 		}
