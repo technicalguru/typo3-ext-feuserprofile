@@ -65,7 +65,7 @@ class tx_feuserprofile_pibase extends tx_rsextbase_pibase {
 	 */
 	function createDatabaseObject() {
 		$this->db = t3lib_div::makeInstance('tx_feuserprofile_database');
-		$this->db->init($this);
+		$this->db->init($this->config);
 	}
 	
 	function tempnam($dir, $prefix, $suffix) {
